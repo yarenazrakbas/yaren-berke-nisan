@@ -113,9 +113,7 @@
   }
 
   if (musicToggle) {
-    musicToggle.addEventListener('pointerup', function (event) {
-      if (event.pointerType === 'mouse' && event.button !== 0) return;
-      event.preventDefault();
+    musicToggle.addEventListener('click', function (event) {
       event.stopPropagation();
       toggleMusic();
     });
