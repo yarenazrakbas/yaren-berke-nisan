@@ -16,7 +16,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <link rel="stylesheet" href="styles.css?v=20260901-44">
+  <link rel="stylesheet" href="styles.css?v=20260901-45">
   <link rel="preload" href="audio/classical.mp3?v=35" as="fetch" type="audio/mpeg">
   <style>
     /* Kritik davetiye kartı — eski CSS önbelleğine karşı */
@@ -65,6 +65,10 @@
       text-decoration: none !important;
       font-family: 'Cinzel', Georgia, serif !important;
       text-transform: uppercase !important;
+    }
+    /* İlk kart (hero) — Katılımını onayla gizle */
+    .hero.invitation-card--hero .btn-confirm {
+      display: none !important;
     }
     /* Kritik — önbelleğe karşı (hatırlatıcı + müzik butonu) */
     .countdown-section {
@@ -376,6 +380,6 @@
   })();
   </script>
 
-  <script src="script.js?v=20260901-43"></script>
+  <script src="script.js?v=20260901-45"></script>
 </body>
 </html>

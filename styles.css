@@ -478,6 +478,10 @@ body.envelope-locked {
   position: relative;
 }
 
+.hero.invitation-card--hero .btn-confirm {
+  display: none;
+}
+
 .btn-confirm {
   display: inline-flex;
   align-items: center;
