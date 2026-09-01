@@ -886,7 +886,13 @@ body.envelope-locked {
 }
 
 .btn-rsvp {
-  margin-top: 0.25rem;
+  margin: 0.5rem auto 1.25rem;
+  min-width: 220px;
+}
+
+.rsvp-section {
+  position: relative;
+  z-index: 1;
 }
 
 .form-group {

@@ -16,7 +16,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <link rel="stylesheet" href="styles.css?v=20260901-42">
+  <link rel="stylesheet" href="styles.css?v=20260901-43">
   <link rel="preload" href="audio/classical.mp3?v=35" as="fetch" type="audio/mpeg">
   <style>
     /* Kritik davetiye kartı — eski CSS önbelleğine karşı */
@@ -79,6 +79,21 @@
     .music-toggle.visible {
       opacity: 1 !important;
       pointer-events: auto !important;
+    }
+    .btn-rsvp {
+      display: inline-flex !important;
+      visibility: visible !important;
+      background: #ffffff !important;
+      color: #3d2b1f !important;
+      margin: 1rem auto 1.25rem !important;
+      position: relative !important;
+      z-index: 10 !important;
+      pointer-events: auto !important;
+    }
+    .hero .btn-confirm[href*="whatsapp"] {
+      pointer-events: auto !important;
+      position: relative !important;
+      z-index: 10 !important;
     }
   </style>
 </head>
@@ -175,7 +190,7 @@
         <p class="invitation-welcome">Nişanımıza Hoşgeldiniz</p>
         <p class="invitation-date">26 Eylül 2026</p>
         <a
-          href="https://wa.me/905387812328?text=Merhaba%2C%20Yaren%20%26%20Berke%20ni%C5%9Fan%C4%B1na%20kat%C4%B1lmak%20istiyorum.%20Ki%C5%9Fi%20say%C4%B1s%C4%B1%3A%20"
+          href="https://api.whatsapp.com/send?phone=905387812328&amp;text=Merhaba%2C%20Yaren%20%26%20Berke%20ni%C5%9Fan%C4%B1na%20kat%C4%B1lmak%20istiyorum.%20Ki%C5%9Fi%20say%C4%B1s%C4%B1%3A%20"
           class="btn-confirm"
         >Katılımını onayla</a>
       </div>
@@ -211,8 +226,8 @@
     </section>
 
     <!-- Hikayemiz -->
-    <section class="story-section">
-      <h2 class="section-title">Hikayemiz</h2>
+    <section class="story-section" id="hikayemiz">
+      <h2 class="section-title" id="story-title">Hikayemiz</h2>
       <div class="photo-gallery">
         <div class="photo-gallery-track">
           <img src="https://yarenazrakbas.github.io/yaren-berke-nisan/images/story-1.jpg" alt="Yaren & Berke nişan fotoğrafı 1">
@@ -306,11 +321,11 @@
     <!-- RSVP -->
     <section class="rsvp-section" id="rsvp">
       <h2 class="section-title">Lütfen Cevap Veriniz</h2>
-      <p class="rsvp-message">Katılmak isterseniz lütfen kaç kişi gelecekseniz bize bildirin ❤️</p>
       <a
-        href="https://wa.me/905387812328?text=Merhaba%2C%20Yaren%20%26%20Berke%20ni%C5%9Fan%C4%B1na%20kat%C4%B1lmak%20istiyorum.%20Ki%C5%9Fi%20say%C4%B1s%C4%B1%3A%20"
+        href="https://api.whatsapp.com/send?phone=905387812328&amp;text=Merhaba%2C%20Yaren%20%26%20Berke%20ni%C5%9Fan%C4%B1na%20kat%C4%B1lmak%20istiyorum.%20Ki%C5%9Fi%20say%C4%B1s%C4%B1%3A%20"
         class="btn-reminder btn-rsvp"
-      >WhatsApp ile yazın</a>
+      >WhatsApp ile cevap verin</a>
+      <p class="rsvp-message">Katılmak isterseniz lütfen kaç kişi gelecekseniz bize WhatsApp’tan bildirin ❤️</p>
     </section>
 
     <!-- Footer -->
@@ -370,6 +385,6 @@
   })();
   </script>
 
-  <script src="script.js?v=20260901-42"></script>
+  <script src="script.js?v=20260901-43"></script>
 </body>
 </html>
