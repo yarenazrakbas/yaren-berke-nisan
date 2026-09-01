@@ -77,42 +77,98 @@
     return n < 10 ? '0' + n : String(n);
   }
 
-  // ===== Open the phone's calendar application =====
-  const calendarFileUrl =
-    'https://yarenazrakbas.github.io/yaren-berke-nisan/event.ics?v=11';
+  // ===== Telefon takvim uygulamasını aç =====
+  const EVENT_BEGIN_MS = new Date('2026-09-26T19:00:00+03:00').getTime();
+  const EVENT_END_MS = new Date('2026-09-26T22:00:00+03:00').getTime();
+  const ICS_FILE_URL =
+    'https://yarenazrakbas.github.io/yaren-berke-nisan/event.ics?v=14';
 
-  function openPhoneCalendar() {
-    const userAgent = navigator.userAgent || '';
-    const isIOS = /iPad|iPhone|iPod/.test(userAgent) ||
+  function getICSContent() {
+    return [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//YarenBerke//Nisan//TR',
+      'CALSCALE:GREGORIAN',
+      'METHOD:PUBLISH',
+      'BEGIN:VEVENT',
+      'UID:yaren-berke-nisan-20260926@yarenazrakbas.github.io',
+      'DTSTAMP:' + new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z',
+      'DTSTART;TZID=Europe/Istanbul:20260926T190000',
+      'DTEND;TZID=Europe/Istanbul:20260926T220000',
+      'SUMMARY:Yaren & Berke Nişan',
+      'DESCRIPTION:Nişanımıza Hoşgeldiniz — Yaren & Berke',
+      'LOCATION:LUN\'ADA DAVET EVİ\\, Bağlar Mah. Yavuz Selim Cad. No:106/1B\\, Erenler/Sakarya',
+      'BEGIN:VALARM',
+      'TRIGGER:-P1D',
+      'ACTION:DISPLAY',
+      'DESCRIPTION:Yaren & Berke Nişanı yarın! 26 Eylül 19:00',
+      'END:VALARM',
+      'END:VEVENT',
+      'END:VCALENDAR'
+    ].join('\r\n');
+  }
+
+  function isMobileDevice() {
+    return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent || '');
+  }
+
+  function isAndroidDevice() {
+    return /Android/i.test(navigator.userAgent || '');
+  }
+
+  function isIOSDevice() {
+    return /iPhone|iPad|iPod/i.test(navigator.userAgent || '') ||
       (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-    const isAndroid = /Android/i.test(userAgent);
+  }
 
-    if (isIOS) {
-      // iOS opens a text/calendar response in the Calendar event preview.
-      window.location.assign(calendarFileUrl);
+  function buildAndroidIntentUrl() {
+    const fallback = encodeURIComponent(ICS_FILE_URL);
+    return [
+      'intent://#Intent',
+      'action=android.intent.action.INSERT',
+      'type=vnd.android.cursor.item/event',
+      'S.title=' + encodeURIComponent(EVENT_TITLE),
+      'S.description=' + encodeURIComponent(EVENT_DESCRIPTION),
+      'S.eventLocation=' + encodeURIComponent(EVENT_LOCATION),
+      'i.beginTime=' + EVENT_BEGIN_MS,
+      'i.endTime=' + EVENT_END_MS,
+      'S.browser_fallback_url=' + fallback,
+      'end'
+    ].join(';');
+  }
+
+  function openCalendarWithICSData() {
+    const blob = new Blob([getICSContent()], { type: 'text/calendar;charset=utf-8' });
+    const blobUrl = URL.createObjectURL(blob);
+    window.location.assign(blobUrl);
+    setTimeout(function () {
+      URL.revokeObjectURL(blobUrl);
+    }, 5000);
+  }
+
+  function openCalendarWithICSFile() {
+    window.location.href = ICS_FILE_URL;
+  }
+
+  function openPhoneCalendar(event) {
+    event.preventDefault();
+
+    if (!isMobileDevice()) {
+      window.alert('Takvime eklemek için davetiyeyi telefonunuzdan açın.');
       return;
     }
 
-    if (isAndroid) {
-      const beginTime = new Date('2026-09-26T19:00:00+03:00').getTime();
-      const endTime = new Date('2026-09-26T22:00:00+03:00').getTime();
-      const intent = [
-        'intent://#Intent',
-        'action=android.intent.action.INSERT',
-        'type=vnd.android.cursor.item/event',
-        'S.title=' + encodeURIComponent(EVENT_TITLE),
-        'S.description=' + encodeURIComponent(EVENT_DESCRIPTION),
-        'S.eventLocation=' + encodeURIComponent(EVENT_LOCATION),
-        'l.beginTime=' + beginTime,
-        'l.endTime=' + endTime,
-        'end'
-      ].join(';');
-
-      window.location.href = intent;
+    if (isAndroidDevice()) {
+      window.location.href = buildAndroidIntentUrl();
       return;
     }
 
-    window.alert('Takvime eklemek için bu davetiyeyi telefonunuzdan açın.');
+    if (isIOSDevice()) {
+      openCalendarWithICSData();
+      return;
+    }
+
+    openCalendarWithICSFile();
   }
 
   document.querySelectorAll('.calendar-button').forEach(function (button) {
