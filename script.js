@@ -13,29 +13,33 @@
   const envelope = document.querySelector('.envelope');
   const musicToggle = document.getElementById('music-toggle');
 
+  document.body.classList.add('envelope-locked');
+
   function openEnvelope() {
     if (openBtn.disabled) return;
     openBtn.disabled = true;
 
     envelope.classList.add('opened');
 
+    // Flap finishes at ~1.35s, letter finishes sliding out at ~2.15s.
     setTimeout(function () {
-      envelopeScreen.classList.add('opening');
-    }, 600);
+      mainContent.classList.remove('hidden');
+      document.body.classList.remove('envelope-locked');
+      window.scrollTo(0, 0);
+      requestAnimationFrame(function () {
+        mainContent.classList.add('revealed');
+        envelopeScreen.classList.add('fading');
+      });
+      musicToggle.classList.add('visible');
+      startCountdown();
+    }, 2500);
 
     setTimeout(function () {
       envelopeScreen.classList.add('hidden');
-      mainContent.classList.remove('hidden');
-      musicToggle.classList.add('visible');
-      startCountdown();
-    }, 1400);
+    }, 3500);
   }
 
   openBtn.addEventListener('click', openEnvelope);
-  openBtn.addEventListener('touchstart', function (e) {
-    e.preventDefault();
-    openEnvelope();
-  }, { passive: false });
 
   // ===== Countdown =====
   let countdownInterval;

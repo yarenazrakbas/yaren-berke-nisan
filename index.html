@@ -16,20 +16,61 @@
 
   <!-- Envelope Intro -->
   <div id="envelope-screen" class="envelope-screen">
-    <div class="envelope">
-      <div class="envelope-back"></div>
-      <div class="envelope-flap envelope-flap-top"></div>
-      <div class="envelope-flap envelope-flap-left"></div>
-      <div class="envelope-flap envelope-flap-right"></div>
-      <div class="envelope-flap envelope-flap-bottom"></div>
+    <div class="envelope" id="envelope">
+      <div class="env-interior"></div>
+
+      <div class="env-letter">
+        <div class="env-letter-paper">
+          <svg class="env-letter-floral env-letter-floral-top" viewBox="0 0 400 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 85 Q50 25 100 65 Q150 105 200 45 Q250 5 300 55 Q350 95 400 35 L400 0 L0 0Z" fill="url(#letterGrad)" opacity="0.35"/>
+            <ellipse cx="70" cy="72" rx="13" ry="7" fill="#a8b896" opacity="0.45" transform="rotate(-28 70 72)"/>
+            <ellipse cx="118" cy="52" rx="15" ry="8" fill="#8fa87a" opacity="0.4" transform="rotate(22 118 52)"/>
+            <ellipse cx="288" cy="58" rx="14" ry="8" fill="#a8b896" opacity="0.45" transform="rotate(-18 288 58)"/>
+            <ellipse cx="330" cy="70" rx="11" ry="6" fill="#8fa87a" opacity="0.4" transform="rotate(34 330 70)"/>
+            <defs>
+              <linearGradient id="letterGrad" x1="0" y1="0" x2="400" y2="130">
+                <stop offset="0%" stop-color="#c5d4b0"/>
+                <stop offset="100%" stop-color="#e8ede0"/>
+              </linearGradient>
+            </defs>
+          </svg>
+
+          <div class="env-letter-content">
+            <p class="env-letter-sub">Nişanımızı birlikte kutlamak için davetlisiniz</p>
+            <h2 class="env-letter-names">Yaren <span class="amp">&</span> Berke</h2>
+            <span class="env-letter-rule"></span>
+            <p class="env-letter-date">26 Eylül 2026</p>
+          </div>
+
+          <svg class="env-letter-floral env-letter-floral-bottom" viewBox="0 0 400 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 20 Q100 80 200 35 Q300 80 400 25 L400 100 L0 100Z" fill="url(#letterGrad2)" opacity="0.3"/>
+            <defs>
+              <linearGradient id="letterGrad2" x1="0" y1="0" x2="400" y2="100">
+                <stop offset="0%" stop-color="#e8ede0"/>
+                <stop offset="100%" stop-color="#c5d4b0"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+      </div>
+
+      <div class="env-side env-side-left"></div>
+      <div class="env-side env-side-right"></div>
+      <div class="env-side env-side-bottom"></div>
+
+      <div class="env-flap">
+        <div class="env-flap-face env-flap-front"></div>
+        <div class="env-flap-face env-flap-back"></div>
+      </div>
+
       <button class="wax-seal" id="open-envelope" aria-label="Davetiyeyi aç">
-        <span class="seal-inner">
-          <span class="seal-date">26</span>
-          <span class="seal-month">Eylül</span>
+        <span class="seal-face">
+          <span class="seal-initials">Y <em>&</em> B</span>
+          <span class="seal-date">26.09.2026</span>
         </span>
       </button>
     </div>
-    <p class="envelope-hint">Davetiyeyi açmak için mührü dokunun</p>
+    <p class="envelope-hint">Açmak için mühre dokunun</p>
   </div>
 
   <!-- Main Content -->
