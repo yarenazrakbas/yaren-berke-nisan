@@ -51,6 +51,9 @@ body.envelope-locked {
 .envelope-screen {
   position: fixed;
   inset: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
   z-index: 1000;
   overflow: hidden;
   background: #e5c2ba;
@@ -65,37 +68,58 @@ body.envelope-locked {
 .envelope {
   position: absolute;
   inset: 0;
-  perspective: 1400px;
+  width: 100%;
+  height: 100%;
+  perspective: 1600px;
   perspective-origin: 50% 0%;
 }
 
-/* Envelope paper texture, shared */
-.env-side,
-.env-flap-face {
-  background-image:
-    repeating-linear-gradient(0deg, rgba(255,255,255,0.055) 0 1px, transparent 1px 3px),
-    repeating-linear-gradient(90deg, rgba(120,80,70,0.045) 0 1px, transparent 1px 3px);
-}
-
-/* Dark inner lining, revealed when the flap opens */
-.env-interior {
+/* Full-screen textured paper base */
+.env-base {
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(120% 80% at 50% 0%, #5a4034 0%, #3a2820 60%, #2b1d17 100%);
+  background-color: #e5c2ba;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.06) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(120,80,70,0.05) 0 1px, transparent 1px 3px),
+    linear-gradient(160deg, #efd4cc 0%, #e5c2ba 45%, #ddb5ab 100%);
   z-index: 1;
 }
 
-/* Letter that slides out of the envelope */
+/* Fold crease lines overlay */
+.env-creases {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Dark inner lining */
+.env-interior {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 80% at 50% 0%, #5a4034 0%, #3a2820 60%, #2b1d17 100%);
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.4s ease 0.3s;
+}
+
+.envelope.opened .env-interior {
+  opacity: 1;
+}
+
+/* Letter slides out */
 .env-letter {
   position: absolute;
-  left: 5%;
-  width: 90%;
-  top: 11%;
-  height: 80%;
-  z-index: 2;
-  transform: translateY(62%);
-  transition: transform 1.15s cubic-bezier(0.22, 0.9, 0.28, 1) 0.9s;
+  left: 4%;
+  width: 92%;
+  top: 10%;
+  height: 82%;
+  z-index: 4;
+  transform: translateY(68%);
+  transition: transform 1.15s cubic-bezier(0.22, 0.9, 0.28, 1) 0.85s;
 }
 
 .envelope.opened .env-letter {
@@ -162,45 +186,21 @@ body.envelope-locked {
   letter-spacing: 0.12em;
 }
 
-/* Envelope front panels */
-.env-side {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-}
-
-.env-side-left {
-  background-color: #e3c0b8;
-  clip-path: polygon(0 0, 0 100%, 50% 50%);
-  box-shadow: inset -1px 0 0 rgba(255,255,255,0.25);
-}
-
-.env-side-right {
-  background-color: #e3c0b8;
-  clip-path: polygon(100% 0, 100% 100%, 50% 50%);
-}
-
-.env-side-bottom {
-  background-color: #ecd0c8;
-  clip-path: polygon(0 100%, 100% 100%, 50% 42%);
-  filter: drop-shadow(0 -2px 5px rgba(90,55,45,0.18));
-}
-
-/* Top flap */
+/* Top flap — opens upward */
 .env-flap {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 58%;
-  z-index: 40;
+  height: 56%;
+  z-index: 20;
   transform-origin: top center;
   transform-style: preserve-3d;
   will-change: transform;
 }
 
 .envelope.opened .env-flap {
-  animation: flapOpen 1.15s cubic-bezier(0.55, 0.05, 0.3, 1) 0.2s forwards;
+  animation: flapOpen 1.15s cubic-bezier(0.55, 0.05, 0.3, 1) 0.15s forwards;
 }
 
 @keyframes flapOpen {
@@ -219,7 +219,7 @@ body.envelope-locked {
 .env-flap-front {
   background-color: #e9c8c0;
   background-image:
-    linear-gradient(180deg, rgba(255,255,255,0.35), rgba(150,100,90,0.12)),
+    linear-gradient(180deg, rgba(255,255,255,0.35), rgba(150,100,90,0.1)),
     repeating-linear-gradient(0deg, rgba(255,255,255,0.055) 0 1px, transparent 1px 3px),
     repeating-linear-gradient(90deg, rgba(120,80,70,0.045) 0 1px, transparent 1px 3px);
 }
@@ -230,25 +230,25 @@ body.envelope-locked {
   transform: rotateX(180deg);
 }
 
-/* Wax seal */
+/* Wax seal — large, centered */
 .wax-seal {
   position: absolute;
-  top: 58%;
+  top: 56%;
   left: 50%;
-  width: 96px;
-  height: 96px;
-  margin: -48px 0 0 -48px;
+  width: clamp(100px, 26vmin, 140px);
+  height: clamp(100px, 26vmin, 140px);
+  transform: translate(-50%, -50%);
   padding: 0;
   border: none;
   border-radius: 50%;
   cursor: pointer;
-  z-index: 50;
+  z-index: 30;
   background:
     radial-gradient(circle at 34% 30%, #f0d2c8 0%, #dcaea2 42%, #c8907f 72%, #b57f6f 100%);
   box-shadow:
-    0 10px 24px rgba(90,55,45,0.32),
-    inset 0 2px 5px rgba(255,255,255,0.55),
-    inset 0 -3px 7px rgba(120,70,55,0.45);
+    0 12px 28px rgba(90,55,45,0.35),
+    inset 0 3px 6px rgba(255,255,255,0.55),
+    inset 0 -4px 8px rgba(120,70,55,0.45);
   animation: sealPulse 2.4s ease-in-out infinite;
   transition: transform 0.35s ease, opacity 0.35s ease;
 }
@@ -256,56 +256,32 @@ body.envelope-locked {
 .wax-seal::before {
   content: '';
   position: absolute;
-  inset: 9px;
+  inset: 11%;
   border-radius: 50%;
   box-shadow:
-    inset 0 2px 4px rgba(120,70,55,0.4),
-    inset 0 -2px 4px rgba(255,255,255,0.4);
+    inset 0 2px 5px rgba(120,70,55,0.4),
+    inset 0 -3px 5px rgba(255,255,255,0.4);
   background: radial-gradient(circle at 40% 35%, #e7c3b8, #cf9c8d 80%);
 }
 
+.wax-seal::after {
+  content: '';
+  position: absolute;
+  inset: 22%;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: inset 0 1px 3px rgba(120,70,55,0.2);
+}
+
 .wax-seal:active {
-  transform: scale(0.94);
+  transform: translate(-50%, -50%) scale(0.94);
 }
 
 .envelope.opened .wax-seal {
   animation: none;
   opacity: 0;
-  transform: scale(0.6);
+  transform: translate(-50%, -50%) scale(0.5);
   pointer-events: none;
-}
-
-.seal-face {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 3px;
-  color: rgba(122, 74, 60, 0.72);
-  text-shadow: 0 1px 0 rgba(255,255,255,0.45);
-}
-
-.seal-initials {
-  font-family: var(--font-serif);
-  font-size: 1.15rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  line-height: 1;
-}
-
-.seal-initials em {
-  font-family: var(--font-script);
-  font-style: normal;
-  font-size: 1.1em;
-}
-
-.seal-date {
-  font-family: var(--font-serif);
-  font-size: 0.5rem;
-  letter-spacing: 0.14em;
-  opacity: 0.85;
 }
 
 @keyframes sealPulse {
@@ -315,32 +291,6 @@ body.envelope-locked {
   50% {
     box-shadow: 0 14px 34px rgba(90,55,45,0.42), inset 0 2px 5px rgba(255,255,255,0.55), inset 0 -3px 7px rgba(120,70,55,0.45);
   }
-}
-
-.envelope-hint {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 5vh;
-  z-index: 60;
-  text-align: center;
-  font-family: var(--font-serif);
-  font-size: 0.9rem;
-  letter-spacing: 0.06em;
-  color: rgba(255,255,255,0.9);
-  text-shadow: 0 1px 6px rgba(120,70,55,0.5);
-  opacity: 0;
-  animation: hintIn 0.9s ease 2.5s forwards;
-}
-
-.envelope.opened ~ .envelope-hint {
-  animation: none;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-@keyframes hintIn {
-  to { opacity: 0.9; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -647,10 +597,11 @@ body.envelope-locked {
 
 /* ===== Timeline ===== */
 .timeline {
-  max-width: 360px;
+  max-width: 380px;
   margin: 1.5rem auto 0;
   position: relative;
   text-align: left;
+  padding: 0 0.5rem;
 }
 
 .timeline::before {
@@ -665,8 +616,8 @@ body.envelope-locked {
 
 .timeline-item {
   display: grid;
-  grid-template-columns: 36px 56px 1fr;
-  align-items: center;
+  grid-template-columns: 36px 62px 1fr;
+  align-items: start;
   gap: 0.75rem;
   margin-bottom: 1.5rem;
   position: relative;
@@ -699,10 +650,12 @@ body.envelope-locked {
 }
 
 .timeline-label {
-  font-size: 0.65rem;
-  letter-spacing: 0.1em;
+  font-family: var(--font-serif);
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
   font-weight: 400;
-  line-height: 1.4;
+  line-height: 1.45;
+  padding-top: 0.35rem;
 }
 
 /* ===== FAQ ===== */
