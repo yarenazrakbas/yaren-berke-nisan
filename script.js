@@ -106,31 +106,6 @@
     return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
   }
 
-  // ===== RSVP Form =====
-  const rsvpForm = document.getElementById('rsvp-form');
-  const rsvpSuccess = document.getElementById('rsvp-success');
-
-  rsvpForm.addEventListener('submit', function (e) {
-    e.preventDefault();
-
-    const formData = new FormData(rsvpForm);
-    const data = {
-      name: formData.get('name'),
-      email: formData.get('email'),
-      attendance: formData.get('attendance'),
-      guests: formData.get('guests'),
-      message: formData.get('message')
-    };
-
-    const responses = JSON.parse(localStorage.getItem('rsvp_responses') || '[]');
-    data.timestamp = new Date().toISOString();
-    responses.push(data);
-    localStorage.setItem('rsvp_responses', JSON.stringify(responses));
-
-    rsvpForm.classList.add('hidden');
-    rsvpSuccess.classList.remove('hidden');
-  });
-
   // ===== Music Toggle (placeholder — add your own audio file) =====
   let isPlaying = false;
 
