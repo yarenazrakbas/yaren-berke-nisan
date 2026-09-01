@@ -163,6 +163,8 @@ body.envelope-locked {
   box-shadow: 0 -6px 28px rgba(0,0,0,0.28);
   align-items: center;
   justify-content: center;
+  border-radius: 12px;
+  padding: 2.5rem 1.25rem 2.75rem;
 }
 
 .invitation-card--hero {
@@ -203,16 +205,6 @@ body.envelope-locked {
   max-height: 34%;
 }
 
-.invitation-card--envelope .invitation-floral-top {
-  max-width: 40%;
-  max-height: 34%;
-}
-
-.invitation-card--envelope .invitation-floral-bottom {
-  max-width: 38%;
-  max-height: 30%;
-}
-
 .invitation-inner {
   position: relative;
   z-index: 2;
@@ -227,11 +219,7 @@ body.envelope-locked {
   justify-content: center;
 }
 
-.invitation-card--envelope .invitation-inner {
-  max-width: 88%;
-  padding: 2.75rem 1rem 2.5rem;
-}
-
+.invitation-card--envelope .invitation-inner,
 .invitation-card--hero .invitation-inner {
   padding: 3rem 1.25rem 2rem;
 }
@@ -250,18 +238,6 @@ body.envelope-locked {
   position: relative;
   z-index: 2;
   padding: 0 0.75rem;
-}
-
-.invitation-card--envelope .invitation-names {
-  font-size: clamp(1.3rem, 5.8vw, 2rem);
-}
-
-.invitation-card--envelope .invitation-welcome {
-  font-size: clamp(1.35rem, 5.5vw, 2rem);
-}
-
-.invitation-card--envelope .invitation-date {
-  margin-bottom: 0;
 }
 
 .invitation-names {
@@ -323,6 +299,7 @@ body.envelope-locked {
   text-align: center;
 }
 
+.invitation-card--envelope .invitation-date,
 .invitation-card--hero .invitation-date {
   margin-bottom: 1rem;
 }
