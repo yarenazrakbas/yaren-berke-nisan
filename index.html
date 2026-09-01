@@ -16,22 +16,35 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <link rel="stylesheet" href="styles.css?v=20260901-19">
+  <link rel="stylesheet" href="styles.css?v=20260901-20">
   <style>
-    /* Kritik hero stilleri — eski CSS önbelleğine karşı */
-    .hero {
+    /* Kritik davetiye kartı — eski CSS önbelleğine karşı */
+    .invitation-card,
+    .hero,
+    .env-letter-paper {
       background: #f7f5ef !important;
       border: 1px solid #e5dfd3 !important;
-      border-radius: 12px !important;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.35) !important;
     }
-    .hero .couple-names {
+    .invitation-names,
+    .couple-names,
+    .env-letter-names {
       font-family: 'Cinzel', Georgia, serif !important;
       text-transform: uppercase !important;
       display: grid !important;
       grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) !important;
     }
-    .hero .btn-confirm {
+    .invitation-names .amp,
+    .couple-names .amp,
+    .env-letter-names .amp {
+      font-family: 'Great Vibes', cursive !important;
+      text-transform: none !important;
+    }
+    .invitation-welcome,
+    .hero-welcome {
+      font-family: 'Great Vibes', cursive !important;
+      color: #c9958a !important;
+    }
+    .btn-confirm {
       border: 1px solid #a87e6b !important;
       text-decoration: none !important;
       font-family: 'Cinzel', Georgia, serif !important;
@@ -74,19 +87,20 @@
       <div class="env-interior"></div>
 
       <div class="env-letter">
-        <div class="env-letter-paper">
-          <img class="env-letter-floral env-letter-floral-top" src="https://yarenazrakbas.github.io/yaren-berke-nisan/images/hero-floral-top.png?v=19" alt="" aria-hidden="true">
-          <div class="env-letter-content">
-            <p class="env-letter-sub">Nişanımızı birlikte kutlamak için<br>davetlisiniz</p>
-            <h2 class="env-letter-names">
+        <div class="env-letter-paper invitation-card invitation-card--envelope">
+          <img class="invitation-floral invitation-floral-top" src="https://yarenazrakbas.github.io/yaren-berke-nisan/images/hero-floral-top.png?v=20" alt="" aria-hidden="true">
+          <div class="invitation-inner">
+            <p class="invitation-subtitle">Nişanımızı birlikte kutlamak için<br>davetlisiniz</p>
+            <h2 class="invitation-names">
               <span>Yaren</span>
               <span class="amp">&</span>
               <span>Berke</span>
             </h2>
-            <span class="env-letter-rule"></span>
-            <p class="env-letter-date">26 Eylül 2026</p>
+            <span class="invitation-divider" aria-hidden="true"></span>
+            <p class="invitation-welcome">Nişanımıza Hoşgeldiniz</p>
+            <p class="invitation-date">26 Eylül 2026</p>
           </div>
-          <img class="env-letter-floral env-letter-floral-bottom" src="https://yarenazrakbas.github.io/yaren-berke-nisan/images/hero-floral-bottom.png?v=19" alt="" aria-hidden="true">
+          <img class="invitation-floral invitation-floral-bottom" src="https://yarenazrakbas.github.io/yaren-berke-nisan/images/hero-floral-bottom.png?v=20" alt="" aria-hidden="true">
         </div>
       </div>
 
@@ -107,21 +121,21 @@
   <div id="main-content" class="main-content hidden">
 
     <!-- Hero Card -->
-    <section class="hero">
-      <img class="hero-floral hero-floral-top" src="https://yarenazrakbas.github.io/yaren-berke-nisan/images/hero-floral-top.png?v=19" alt="" aria-hidden="true">
-      <div class="hero-inner">
-        <p class="hero-subtitle">Nişanımızı birlikte kutlamak için<br>davetlisiniz</p>
-        <h1 class="couple-names">
+    <section class="hero invitation-card invitation-card--hero">
+      <img class="invitation-floral invitation-floral-top" src="https://yarenazrakbas.github.io/yaren-berke-nisan/images/hero-floral-top.png?v=20" alt="" aria-hidden="true">
+      <div class="invitation-inner">
+        <p class="invitation-subtitle">Nişanımızı birlikte kutlamak için<br>davetlisiniz</p>
+        <h1 class="invitation-names">
           <span>Yaren</span>
           <span class="amp">&</span>
           <span>Berke</span>
         </h1>
-        <span class="hero-divider" aria-hidden="true"></span>
-        <p class="hero-welcome">Nişanımıza Hoşgeldiniz</p>
-        <p class="hero-date">26 Eylül 2026</p>
+        <span class="invitation-divider" aria-hidden="true"></span>
+        <p class="invitation-welcome">Nişanımıza Hoşgeldiniz</p>
+        <p class="invitation-date">26 Eylül 2026</p>
         <a href="#rsvp" class="btn-confirm">Katılımını onayla</a>
       </div>
-      <img class="hero-floral hero-floral-bottom" src="https://yarenazrakbas.github.io/yaren-berke-nisan/images/hero-floral-bottom.png?v=19" alt="" aria-hidden="true">
+      <img class="invitation-floral invitation-floral-bottom" src="https://yarenazrakbas.github.io/yaren-berke-nisan/images/hero-floral-bottom.png?v=20" alt="" aria-hidden="true">
     </section>
 
     <!-- Countdown -->
@@ -287,6 +301,6 @@
     </svg>
   </button>
 
-  <script src="script.js?v=20260901-19"></script>
+  <script src="script.js?v=20260901-20"></script>
 </body>
 </html>
