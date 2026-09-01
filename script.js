@@ -78,63 +78,40 @@
   }
 
   // ===== Calendar with 1-day reminder =====
-  function formatICSStamp(date) {
-    return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+  const ICS_URL = 'https://yarenazrakbas.github.io/yaren-berke-nisan/event.ics';
+
+  function isIOS() {
+    return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   }
 
-  function escapeICS(text) {
-    return text.replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\n/g, '\\n');
+  function isAndroid() {
+    return /Android/.test(navigator.userAgent);
   }
 
-  function buildICS() {
-    const alarmText = 'Yaren & Berke Nişanı yarın! 26 Eylül 19:00 — LUN\'ADA DAVET EVİ';
-
-    return [
-      'BEGIN:VCALENDAR',
-      'VERSION:2.0',
-      'PRODID:-//YarenBerke//Nisan//TR',
-      'CALSCALE:GREGORIAN',
-      'METHOD:PUBLISH',
-      'BEGIN:VEVENT',
-      'UID:yaren-berke-nisan-20260926@yarenazrakbas.github.io',
-      'DTSTAMP:' + formatICSStamp(new Date()),
-      'DTSTART;TZID=Europe/Istanbul:20260926T190000',
-      'DTEND;TZID=Europe/Istanbul:20260926T230000',
-      'SUMMARY:' + escapeICS(EVENT_TITLE),
-      'DESCRIPTION:' + escapeICS(EVENT_DESCRIPTION),
-      'LOCATION:' + escapeICS(EVENT_LOCATION),
-      'BEGIN:VALARM',
-      'TRIGGER:-P1D',
-      'ACTION:DISPLAY',
-      'DESCRIPTION:' + escapeICS(alarmText),
-      'END:VALARM',
-      'END:VEVENT',
-      'END:VCALENDAR'
-    ].join('\r\n');
+  function getGoogleCalendarUrl() {
+    const params = new URLSearchParams({
+      action: 'TEMPLATE',
+      text: EVENT_TITLE,
+      dates: '20260926T160000Z/20260926T200000Z',
+      details: EVENT_DESCRIPTION + ' — 1 gün önce hatırlatma için takvime kaydedin.',
+      location: EVENT_LOCATION
+    });
+    return 'https://calendar.google.com/calendar/render?' + params.toString();
   }
 
   function addToCalendar() {
-    const ics = buildICS();
-    const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-
-    if (isIOS) {
-      window.location.href = url;
-      setTimeout(function () {
-        URL.revokeObjectURL(url);
-      }, 10000);
+    if (isIOS()) {
+      window.location.href = ICS_URL;
       return;
     }
 
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'yaren-berke-nisan.ics';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    if (isAndroid()) {
+      window.location.href = getGoogleCalendarUrl();
+      return;
+    }
+
+    window.open(getGoogleCalendarUrl(), '_blank');
   }
 
   document.getElementById('add-calendar').addEventListener('click', addToCalendar);
