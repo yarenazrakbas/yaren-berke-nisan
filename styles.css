@@ -1,6 +1,6 @@
 /* ===== Variables ===== */
 :root {
-  color-scheme: light only;
+  color-scheme: only light;
   --cream: #f5f0e8;
   --cream-dark: #ebe4d8;
   --pink: #e8c4c4;
@@ -27,6 +27,8 @@
 html {
   scroll-behavior: smooth;
   -webkit-tap-highlight-color: transparent;
+  color-scheme: only light;
+  background-color: #3d2b1f;
 }
 
 body {
@@ -988,12 +990,29 @@ body.envelope-locked {
   }
 }
 
-/* Keep the invitation light and blush-pink on dark-mode devices. */
+/* Karanlık modda da açık moddaki renkler aynen kalsın (tarayıcı karartmasını engelle) */
 @media (prefers-color-scheme: dark) {
   html,
   body {
-    background: #f8edef;
-    color: #4b3338;
+    background-color: #3d2b1f !important;
+    color: #ffffff !important;
+  }
+
+  .main-content {
+    background-color: transparent !important;
+  }
+
+  .hero {
+    background-color: #f5f0e8 !important;
+    color: #2c2c2c !important;
+  }
+
+  .hero-subtitle,
+  .couple-names,
+  .hero-welcome,
+  .hero-date,
+  .btn-confirm {
+    color: inherit !important;
   }
 
   .countdown-section,
@@ -1004,65 +1023,46 @@ body.envelope-locked {
   .faq-section,
   .rsvp-section,
   .footer {
-    background: #f8edef;
-    color: #4b3338;
+    background-color: #3d2b1f !important;
+    color: #ffffff !important;
   }
 
-  .main-content {
-    background: #fffafa;
-    box-shadow: 0 0 45px rgba(137, 88, 98, 0.15);
-  }
-
-  .section-divider,
-  .countdown-divider,
-  .timeline::before {
-    background: rgba(137, 88, 98, 0.28);
-  }
-
-  .reminder-icon,
-  .location-icon,
-  .timeline-icon,
-  .timeline-time {
-    border-color: rgba(137, 88, 98, 0.45);
-  }
-
-  .timeline-icon {
-    background: #f8edef;
-  }
-
-  .btn-outline {
-    color: #4b3338;
-    border-color: rgba(137, 88, 98, 0.55);
-  }
-
-  .btn-outline:hover {
-    color: #4b3338;
-    background: rgba(212, 165, 165, 0.18);
-    border-color: #a66f7a;
+  .section-title,
+  .countdown-num,
+  .countdown-label,
+  .countdown-unit,
+  .reminder-text,
+  .reminder-note,
+  .venue-name,
+  .venue-time,
+  .venue-address,
+  .timeline-label,
+  .timeline-time,
+  .rsvp-message,
+  .footer p {
+    color: #ffffff !important;
   }
 
   .btn-reminder {
-    color: #fff;
-    background: #c78f9b;
+    background-color: #ffffff !important;
+    color: #3d2b1f !important;
   }
 
-  .reminder-note,
-  .countdown-label,
-  .countdown-unit,
-  .venue-time,
-  .venue-address,
-  .rsvp-message {
-    color: #65474d;
-    opacity: 0.8;
+  .btn-outline {
+    background-color: transparent !important;
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.6) !important;
   }
 
-  .footer {
-    border-top-color: rgba(137, 88, 98, 0.18);
+  .timeline-icon {
+    background-color: #3d2b1f !important;
   }
 
-  .music-toggle {
-    color: #fff;
-    background: rgba(199, 143, 155, 0.92);
-    border-color: rgba(255, 255, 255, 0.7);
+  img,
+  iframe,
+  svg,
+  .map-container iframe {
+    filter: none !important;
+    -webkit-filter: none !important;
   }
 }
