@@ -482,6 +482,17 @@ body.envelope-locked {
   display: none;
 }
 
+.confirm-card-section {
+  background: #F8F5EE;
+  padding: 1.75rem 1.5rem;
+  text-align: center;
+  border-top: 1px solid #e5dfd3;
+}
+
+.confirm-card-section .btn-confirm {
+  color: var(--text-dark);
+}
+
 .btn-confirm {
   display: inline-flex;
   align-items: center;
