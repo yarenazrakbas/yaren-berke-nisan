@@ -161,6 +161,7 @@ body.envelope-locked {
 
 .invitation-card--envelope {
   box-shadow: 0 -6px 28px rgba(0,0,0,0.28);
+  align-items: flex-start;
 }
 
 .invitation-card--hero {
@@ -169,7 +170,8 @@ body.envelope-locked {
   margin: 1.25rem auto 2rem;
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-  padding: 4rem 1.5rem 3.5rem;
+  padding: 2.5rem 1.5rem 2.75rem;
+  align-items: flex-start;
 }
 
 .invitation-floral {
@@ -202,13 +204,13 @@ body.envelope-locked {
   width: 100%;
   max-width: 410px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 3.25rem 1rem 0;
   text-align: center;
 }
 
 .invitation-card--envelope .invitation-inner {
   max-width: 300px;
-  padding: 0 0.75rem;
+  padding: 2.25rem 0.75rem 0;
 }
 
 .invitation-subtitle {
@@ -287,7 +289,7 @@ body.envelope-locked {
 }
 
 .invitation-card--hero .invitation-date {
-  margin-bottom: 2rem;
+  margin-bottom: 1.25rem;
 }
 
 /* Bottom cover — blocks letter peeking before open */
@@ -461,13 +463,13 @@ body.envelope-locked {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 230px;
-  min-height: 56px;
-  padding: 0.9rem 1.5rem;
+  min-width: 190px;
+  min-height: 44px;
+  padding: 0.6rem 1.1rem;
   border: 1px solid #a87e6b;
   font-family: 'Cinzel', Georgia, serif;
-  font-size: 0.78rem;
-  letter-spacing: 0.13em;
+  font-size: 0.68rem;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
   color: var(--text-dark);
   text-decoration: none;
