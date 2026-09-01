@@ -149,7 +149,7 @@ body.envelope-locked {
 /* ===== Davetiye Kartı (zarf + hero ortak) ===== */
 .invitation-card {
   position: relative;
-  background: #f7f5ef;
+  background: #F8F5EE;
   color: var(--text-dark);
   text-align: center;
   overflow: hidden;
@@ -177,8 +177,10 @@ body.envelope-locked {
   width: 62%;
   height: auto;
   display: block;
-  opacity: 0.9;
+  opacity: 1;
   pointer-events: none;
+  background: transparent;
+  mix-blend-mode: normal;
 }
 
 .invitation-floral-top {
@@ -1059,7 +1061,7 @@ body.envelope-locked {
 
   .hero,
   .invitation-card--envelope {
-    background-color: #f7f5ef !important;
+    background-color: #F8F5EE !important;
     color: #2c2c2c !important;
   }
 
