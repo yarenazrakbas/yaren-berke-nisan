@@ -11,9 +11,6 @@
     timezone: 'Europe/Istanbul'
   };
 
-  // Google Calendar API ile OAuth entegrasyonu eklendiğinde kullanılacak hatırlatma ayarı.
-  // eventedit URL'si reminder parametresini resmi olarak desteklemez; API ile:
-  // reminders: { useDefault: false, overrides: [{ method: 'popup', minutes: 1440 }] }
   const calendarReminderConfig = {
     useDefault: false,
     overrides: [{ method: 'popup', minutes: 1440 }]
@@ -21,20 +18,123 @@
 
   const EVENT_DATE = new Date(engagementEvent.start);
 
+  // ===== Background Music (Android / iOS uyumlu) =====
+  const bgMusic = document.getElementById('bg-music');
+  const musicToggle = document.getElementById('music-toggle');
+  let musicToggleLock = false;
+  let userMuted = false;
+  let envelopeOpened = false;
+  let musicUnlocked = false;
+
+  function isMusicPlaying() {
+    return !!(bgMusic && !bgMusic.paused && !bgMusic.ended);
+  }
+
+  function syncMusicUI() {
+    if (!musicToggle || !bgMusic) return;
+
+    var playing = isMusicPlaying();
+    musicToggle.querySelector('.icon-on').classList.toggle('hidden', !playing);
+    musicToggle.querySelector('.icon-off').classList.toggle('hidden', playing);
+    musicToggle.setAttribute('aria-label', playing ? 'Müziği kapat' : 'Ses kapalı');
+    musicToggle.setAttribute('aria-pressed', playing ? 'true' : 'false');
+    musicToggle.classList.toggle('is-muted', !playing);
+  }
+
+  function stopMusic() {
+    if (!bgMusic) return;
+    bgMusic.pause();
+    syncMusicUI();
+  }
+
+  // play() kullanıcı dokunuşu içinde senkron çağrılmalı
+  function unlockAndStartMusic() {
+    if (!bgMusic || userMuted) return;
+
+    if (window.__ybMusicBooted && !bgMusic.paused) {
+      syncMusicUI();
+      return;
+    }
+
+    var targetVolume = 0.45;
+
+    try {
+      bgMusic.muted = false;
+
+      // Android / iOS: önce çok düşük sesle başlat, sonra aç
+      bgMusic.volume = 0.001;
+      bgMusic.play();
+      bgMusic.volume = targetVolume;
+
+      if (bgMusic.paused) {
+        bgMusic.muted = true;
+        bgMusic.play();
+        bgMusic.muted = false;
+        bgMusic.volume = targetVolume;
+      }
+
+      if (bgMusic.paused) {
+        bgMusic.volume = targetVolume;
+        bgMusic.play();
+      }
+
+      musicUnlocked = true;
+      window.__ybMusicBooted = true;
+    } catch (err) {
+      /* Tarayıcı sesi engelledi */
+    }
+
+    syncMusicUI();
+  }
+
+  function muteMusic() {
+    if (!bgMusic || musicToggleLock || !isMusicPlaying()) return;
+
+    musicToggleLock = true;
+    window.setTimeout(function () {
+      musicToggleLock = false;
+    }, 400);
+
+    userMuted = true;
+    stopMusic();
+  }
+
+  if (bgMusic) {
+    bgMusic.volume = 0.45;
+    bgMusic.addEventListener('play', syncMusicUI);
+    bgMusic.addEventListener('pause', syncMusicUI);
+    bgMusic.addEventListener('ended', syncMusicUI);
+  }
+
+  if (musicToggle) {
+    musicToggle.addEventListener('pointerup', function (event) {
+      if (event.pointerType === 'mouse' && event.button !== 0) return;
+      event.preventDefault();
+      event.stopPropagation();
+      muteMusic();
+    });
+
+    syncMusicUI();
+  }
+
   // ===== Envelope Open =====
   const envelopeScreen = document.getElementById('envelope-screen');
   const mainContent = document.getElementById('main-content');
   const openBtn = document.getElementById('open-envelope');
   const envelope = document.querySelector('.envelope');
-  const musicToggle = document.getElementById('music-toggle');
 
   document.body.classList.add('envelope-locked');
 
   function openEnvelope() {
-    if (openBtn.disabled) return;
+    if (envelopeOpened || openBtn.disabled) return;
+    envelopeOpened = true;
     openBtn.disabled = true;
 
     envelope.classList.add('opened');
+
+    if (musicToggle) {
+      musicToggle.classList.add('visible');
+    }
 
     setTimeout(function () {
       mainContent.classList.remove('hidden');
@@ -44,7 +144,6 @@
         mainContent.classList.add('revealed');
         envelopeScreen.classList.add('fading');
       });
-      musicToggle.classList.add('visible');
       startCountdown();
     }, 2500);
 
@@ -53,7 +152,24 @@
     }, 3500);
   }
 
-  openBtn.addEventListener('click', openEnvelope);
+  function handleIntroTap() {
+    if (envelopeOpened) return;
+
+    unlockAndStartMusic();
+    openEnvelope();
+  }
+
+  if (envelopeScreen) {
+    envelopeScreen.addEventListener('touchstart', handleIntroTap, {
+      passive: true,
+      capture: true
+    });
+
+    envelopeScreen.addEventListener('click', function (event) {
+      event.preventDefault();
+      handleIntroTap();
+    }, true);
+  }
 
   // ===== Countdown =====
   let countdownInterval;
@@ -152,35 +268,4 @@
   }
 
   initCalendarLinks();
-
-  // ===== Background Music =====
-  const bgMusic = document.getElementById('bg-music');
-  let isPlaying = false;
-
-  if (bgMusic) {
-    bgMusic.volume = 0.45;
-  }
-
-  function setMusicPlaying(playing) {
-    isPlaying = playing;
-    musicToggle.querySelector('.icon-on').classList.toggle('hidden', !isPlaying);
-    musicToggle.querySelector('.icon-off').classList.toggle('hidden', isPlaying);
-    musicToggle.setAttribute('aria-label', isPlaying ? 'Müziği kapat' : 'Müziği aç');
-  }
-
-  musicToggle.addEventListener('click', function () {
-    if (!bgMusic) return;
-
-    if (isPlaying) {
-      bgMusic.pause();
-      setMusicPlaying(false);
-      return;
-    }
-
-    bgMusic.play().then(function () {
-      setMusicPlaying(true);
-    }).catch(function () {
-      setMusicPlaying(false);
-    });
-  });
 })();

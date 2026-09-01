@@ -16,7 +16,8 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <link rel="stylesheet" href="styles.css?v=20260901-28">
+  <link rel="stylesheet" href="styles.css?v=20260901-35">
+  <link rel="preload" href="audio/classical.mp3?v=35" as="fetch" type="audio/mpeg">
   <style>
     /* Kritik davetiye kartı — eski CSS önbelleğine karşı */
     .invitation-card,
@@ -68,6 +69,16 @@
   </style>
 </head>
 <body>
+
+  <audio
+    id="bg-music"
+    src="audio/classical.mp3?v=35"
+    loop
+    preload="auto"
+    playsinline
+    webkit-playsinline
+    x-webkit-airplay="allow"
+  ></audio>
 
   <!-- Envelope Intro -->
   <div id="envelope-screen" class="envelope-screen">
@@ -127,7 +138,7 @@
         <div class="env-flap-face env-flap-back"></div>
       </div>
 
-      <button class="wax-seal" id="open-envelope" aria-label="Davetiyeyi aç">
+      <button type="button" class="wax-seal" id="open-envelope" aria-label="Davetiyeyi aç">
         <span class="seal-text">lütfen<br>buraya basın</span>
       </button>
     </div>
@@ -311,13 +322,8 @@
     </footer>
   </div>
 
-  <!-- Background Music -->
-  <audio id="bg-music" class="sr-only-audio" loop preload="auto">
-    <source src="audio/classical.mp3?v=29" type="audio/mpeg">
-  </audio>
-
   <!-- Music Toggle -->
-  <button class="music-toggle" id="music-toggle" aria-label="Müziği aç/kapat">
+  <button type="button" class="music-toggle" id="music-toggle" aria-label="Müziği kapat" aria-pressed="false">
     <svg class="icon-on" viewBox="0 0 24 24" fill="currentColor">
       <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
     </svg>
@@ -326,6 +332,46 @@
     </svg>
   </button>
 
-  <script src="script.js?v=20260901-30"></script>
+  <script>
+  (function () {
+    function attachMusicBoot() {
+      var audio = document.getElementById('bg-music');
+      var screen = document.getElementById('envelope-screen');
+      if (!audio || !screen) return;
+
+      function bootMusic() {
+        if (window.__ybMusicBooted) return;
+        window.__ybMusicBooted = true;
+
+        try {
+          audio.volume = 0.001;
+          audio.muted = false;
+          audio.play();
+          audio.volume = 0.45;
+
+          if (audio.paused) {
+            audio.muted = true;
+            audio.play();
+            audio.muted = false;
+            audio.volume = 0.45;
+          }
+        } catch (err) {
+          window.__ybMusicBooted = false;
+        }
+      }
+
+      screen.addEventListener('touchstart', bootMusic, { capture: true, passive: true });
+      screen.addEventListener('click', bootMusic, true);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', attachMusicBoot);
+    } else {
+      attachMusicBoot();
+    }
+  })();
+  </script>
+
+  <script src="script.js?v=20260901-35"></script>
 </body>
 </html>
