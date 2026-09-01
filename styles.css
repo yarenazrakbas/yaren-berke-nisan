@@ -508,8 +508,20 @@ body.envelope-locked {
 }
 
 /* ===== Dark Sections Shared ===== */
-.countdown-section,
-.reminder-section,
+.countdown-section {
+  background: var(--brown);
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+}
+
+.reminder-section {
+  background: #6b5849;
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  padding: 2.75rem 1.5rem 2.5rem;
+  text-align: center;
+}
+
 .story-section,
 .location-section,
 .timeline-section,
@@ -534,6 +546,11 @@ body.envelope-locked {
   height: 1px;
   background: rgba(255,255,255,0.25);
   margin: 2rem auto 0;
+}
+
+.countdown-section .section-divider {
+  width: 70%;
+  background: rgba(255, 255, 255, 0.35);
 }
 
 /* ===== Countdown ===== */
@@ -1044,23 +1061,28 @@ body.envelope-locked {
   position: fixed;
   bottom: 1.5rem;
   right: 1.5rem;
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.4);
-  background: rgba(61, 43, 31, 0.85);
-  color: var(--white);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--brown);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1200;
-  backdrop-filter: blur(8px);
-  transition: background 0.3s, transform 0.2s;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  transition: background 0.3s, transform 0.2s, opacity 0.3s;
   opacity: 0;
   pointer-events: none;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+}
+
+.music-toggle.is-muted {
+  opacity: 0.95;
+  background: rgba(255, 255, 255, 0.88);
 }
 
 .music-toggle.visible {
@@ -1071,10 +1093,6 @@ body.envelope-locked {
 .music-toggle svg {
   width: 20px;
   height: 20px;
-}
-
-.music-toggle.is-muted {
-  opacity: 0.65;
 }
 
 .music-toggle:active {
@@ -1134,7 +1152,6 @@ body.envelope-locked {
   }
 
   .countdown-section,
-  .reminder-section,
   .story-section,
   .location-section,
   .timeline-section,
@@ -1142,6 +1159,12 @@ body.envelope-locked {
   .rsvp-section,
   .footer {
     background-color: #3d2b1f !important;
+    color: #ffffff !important;
+  }
+
+  .reminder-section {
+    background-color: #6b5849 !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.22) !important;
     color: #ffffff !important;
   }
 

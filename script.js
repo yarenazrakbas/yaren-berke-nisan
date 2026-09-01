@@ -36,7 +36,7 @@
     var playing = isMusicPlaying();
     musicToggle.querySelector('.icon-on').classList.toggle('hidden', !playing);
     musicToggle.querySelector('.icon-off').classList.toggle('hidden', playing);
-    musicToggle.setAttribute('aria-label', playing ? 'Müziği kapat' : 'Ses kapalı');
+    musicToggle.setAttribute('aria-label', playing ? 'Müziği kapat' : 'Müziği aç');
     musicToggle.setAttribute('aria-pressed', playing ? 'true' : 'false');
     musicToggle.classList.toggle('is-muted', !playing);
   }
@@ -87,16 +87,22 @@
     syncMusicUI();
   }
 
-  function muteMusic() {
-    if (!bgMusic || musicToggleLock || !isMusicPlaying()) return;
+  function toggleMusic() {
+    if (!bgMusic || musicToggleLock) return;
 
     musicToggleLock = true;
     window.setTimeout(function () {
       musicToggleLock = false;
     }, 400);
 
-    userMuted = true;
-    stopMusic();
+    if (isMusicPlaying()) {
+      userMuted = true;
+      stopMusic();
+      return;
+    }
+
+    userMuted = false;
+    unlockAndStartMusic();
   }
 
   if (bgMusic) {
@@ -111,7 +117,7 @@
       if (event.pointerType === 'mouse' && event.button !== 0) return;
       event.preventDefault();
       event.stopPropagation();
-      muteMusic();
+      toggleMusic();
     });
 
     syncMusicUI();
