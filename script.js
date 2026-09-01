@@ -205,12 +205,34 @@
     button.addEventListener('click', openCalendar);
   });
 
-  // ===== Music Toggle =====
+  // ===== Background Music =====
+  const bgMusic = document.getElementById('bg-music');
   let isPlaying = false;
 
-  musicToggle.addEventListener('click', function () {
-    isPlaying = !isPlaying;
+  if (bgMusic) {
+    bgMusic.volume = 0.45;
+  }
+
+  function setMusicPlaying(playing) {
+    isPlaying = playing;
     musicToggle.querySelector('.icon-on').classList.toggle('hidden', !isPlaying);
     musicToggle.querySelector('.icon-off').classList.toggle('hidden', isPlaying);
+    musicToggle.setAttribute('aria-label', isPlaying ? 'Müziği kapat' : 'Müziği aç');
+  }
+
+  musicToggle.addEventListener('click', function () {
+    if (!bgMusic) return;
+
+    if (isPlaying) {
+      bgMusic.pause();
+      setMusicPlaying(false);
+      return;
+    }
+
+    bgMusic.play().then(function () {
+      setMusicPlaying(true);
+    }).catch(function () {
+      setMusicPlaying(false);
+    });
   });
 })();
