@@ -77,6 +77,48 @@
     return n < 10 ? '0' + n : String(n);
   }
 
+  // ===== Open the phone's calendar application =====
+  const calendarFileUrl =
+    'https://yarenazrakbas.github.io/yaren-berke-nisan/event.ics?v=11';
+
+  function openPhoneCalendar() {
+    const userAgent = navigator.userAgent || '';
+    const isIOS = /iPad|iPhone|iPod/.test(userAgent) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isAndroid = /Android/i.test(userAgent);
+
+    if (isIOS) {
+      // iOS opens a text/calendar response in the Calendar event preview.
+      window.location.assign(calendarFileUrl);
+      return;
+    }
+
+    if (isAndroid) {
+      const beginTime = new Date('2026-09-26T19:00:00+03:00').getTime();
+      const endTime = new Date('2026-09-26T22:00:00+03:00').getTime();
+      const intent = [
+        'intent://#Intent',
+        'action=android.intent.action.INSERT',
+        'type=vnd.android.cursor.item/event',
+        'S.title=' + encodeURIComponent(EVENT_TITLE),
+        'S.description=' + encodeURIComponent(EVENT_DESCRIPTION),
+        'S.eventLocation=' + encodeURIComponent(EVENT_LOCATION),
+        'l.beginTime=' + beginTime,
+        'l.endTime=' + endTime,
+        'end'
+      ].join(';');
+
+      window.location.href = intent;
+      return;
+    }
+
+    window.alert('Takvime eklemek için bu davetiyeyi telefonunuzdan açın.');
+  }
+
+  document.querySelectorAll('.calendar-button').forEach(function (button) {
+    button.addEventListener('click', openPhoneCalendar);
+  });
+
   // ===== Music Toggle =====
   let isPlaying = false;
 
