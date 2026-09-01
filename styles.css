@@ -110,7 +110,7 @@ body.envelope-locked {
   opacity: 1;
 }
 
-/* Letter slides out */
+/* Letter — fully hidden until envelope opens */
 .env-letter {
   position: absolute;
   left: 4%;
@@ -118,12 +118,23 @@ body.envelope-locked {
   top: 10%;
   height: 82%;
   z-index: 4;
-  transform: translateY(68%);
-  transition: transform 1.15s cubic-bezier(0.22, 0.9, 0.28, 1) 0.85s;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(120%);
+  transition:
+    transform 1.15s cubic-bezier(0.22, 0.9, 0.28, 1) 0.85s,
+    opacity 0.4s ease 0.85s,
+    visibility 0s linear 0.85s;
 }
 
 .envelope.opened .env-letter {
+  opacity: 1;
+  visibility: visible;
   transform: translateY(0);
+  transition:
+    transform 1.15s cubic-bezier(0.22, 0.9, 0.28, 1) 0.85s,
+    opacity 0.5s ease 0.9s,
+    visibility 0s linear 0s;
 }
 
 .env-letter-paper {
@@ -186,6 +197,24 @@ body.envelope-locked {
   letter-spacing: 0.12em;
 }
 
+/* Bottom cover — blocks letter peeking before open */
+.env-bottom-cover {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  background-color: #ecd0c8;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.055) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(120,80,70,0.045) 0 1px, transparent 1px 3px);
+  clip-path: polygon(0 44%, 100% 44%, 100% 100%, 0 100%);
+  pointer-events: none;
+  transition: opacity 0.5s ease 0.3s;
+}
+
+.envelope.opened .env-bottom-cover {
+  opacity: 0;
+}
+
 /* Top flap — opens upward */
 .env-flap {
   position: absolute;
@@ -235,8 +264,8 @@ body.envelope-locked {
   position: absolute;
   top: 56%;
   left: 50%;
-  width: clamp(100px, 26vmin, 140px);
-  height: clamp(100px, 26vmin, 140px);
+  width: clamp(112px, 28vmin, 148px);
+  height: clamp(112px, 28vmin, 148px);
   transform: translate(-50%, -50%);
   padding: 0;
   border: none;
@@ -251,6 +280,25 @@ body.envelope-locked {
     inset 0 -4px 8px rgba(120,70,55,0.45);
   animation: sealPulse 2.4s ease-in-out infinite;
   transition: transform 0.35s ease, opacity 0.35s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.seal-text {
+  position: relative;
+  z-index: 2;
+  display: block;
+  font-family: var(--font-serif);
+  font-size: clamp(0.58rem, 2.6vmin, 0.72rem);
+  font-style: italic;
+  line-height: 1.35;
+  letter-spacing: 0.02em;
+  text-align: center;
+  color: rgba(110, 65, 52, 0.82);
+  text-shadow: 0 1px 0 rgba(255,255,255,0.45);
+  padding: 0 0.75rem;
+  pointer-events: none;
 }
 
 .wax-seal::before {
