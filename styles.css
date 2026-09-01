@@ -174,27 +174,26 @@ body.envelope-locked {
 
 .invitation-floral {
   position: absolute;
-  width: 62%;
+  width: auto;
+  max-width: 52%;
   height: auto;
+  max-height: 46%;
   display: block;
   opacity: 1;
   pointer-events: none;
   background: transparent;
   mix-blend-mode: normal;
+  object-fit: contain;
 }
 
 .invitation-floral-top {
-  top: -6%;
-  left: -8%;
-  clip-path: inset(0 50% 0 0);
-  transform: translate(-2%, -2%);
+  top: 0;
+  left: 0;
 }
 
 .invitation-floral-bottom {
-  right: -8%;
-  bottom: -6%;
-  clip-path: inset(0 0 0 50%);
-  transform: translate(2%, 2%);
+  right: 0;
+  bottom: 0;
 }
 
 .invitation-inner {
