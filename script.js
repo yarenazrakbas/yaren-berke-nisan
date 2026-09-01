@@ -77,46 +77,6 @@
     return n < 10 ? '0' + n : String(n);
   }
 
-  // ===== Calendar with 1-day reminder =====
-  const ICS_URL = 'https://yarenazrakbas.github.io/yaren-berke-nisan/event.ics';
-
-  function isIOS() {
-    return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  }
-
-  function isAndroid() {
-    return /Android/.test(navigator.userAgent);
-  }
-
-  function getGoogleCalendarUrl() {
-    const params = new URLSearchParams({
-      action: 'TEMPLATE',
-      text: EVENT_TITLE,
-      dates: '20260926T160000Z/20260926T200000Z',
-      details: EVENT_DESCRIPTION + ' — 1 gün önce hatırlatma için takvime kaydedin.',
-      location: EVENT_LOCATION
-    });
-    return 'https://calendar.google.com/calendar/render?' + params.toString();
-  }
-
-  function addToCalendar() {
-    if (isIOS()) {
-      window.location.href = ICS_URL;
-      return;
-    }
-
-    if (isAndroid()) {
-      window.location.href = getGoogleCalendarUrl();
-      return;
-    }
-
-    window.open(getGoogleCalendarUrl(), '_blank');
-  }
-
-  document.getElementById('add-calendar').addEventListener('click', addToCalendar);
-  document.getElementById('add-reminder').addEventListener('click', addToCalendar);
-
   // ===== Music Toggle =====
   let isPlaying = false;
 

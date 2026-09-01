@@ -535,6 +535,7 @@ body.envelope-locked {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  text-decoration: none;
   padding: 0.95rem 2rem;
   background: var(--white);
   color: var(--brown);
