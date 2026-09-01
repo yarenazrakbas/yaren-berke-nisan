@@ -1,10 +1,25 @@
 (function () {
   'use strict';
 
-  const EVENT_DATE = new Date('2026-09-26T19:00:00+03:00');
-  const EVENT_TITLE = 'Yaren & Berke Nişan';
-  const EVENT_LOCATION = "LUN'ADA DAVET EVİ, Bağlar Mah. Yavuz Selim Cad. No:106/1B, Erenler/Sakarya";
-  const EVENT_DESCRIPTION = 'Nişanımıza Hoşgeldiniz — Yaren & Berke';
+  // ===== Merkezi etkinlik config =====
+  const engagementEvent = {
+    title: 'Yaren & Berke Nişan',
+    description: 'Nişanımıza Hoşgeldiniz — Yaren & Berke',
+    location: "LUN'ADA DAVET EVİ, Bağlar Mah. Yavuz Selim Cad. No:106/1B, Erenler/Sakarya",
+    start: '2026-09-26T19:00:00+03:00',
+    end: '2026-09-26T22:00:00+03:00',
+    timezone: 'Europe/Istanbul'
+  };
+
+  // Google Calendar API ile OAuth entegrasyonu eklendiğinde kullanılacak hatırlatma ayarı.
+  // eventedit URL'si reminder parametresini resmi olarak desteklemez; API ile:
+  // reminders: { useDefault: false, overrides: [{ method: 'popup', minutes: 1440 }] }
+  const calendarReminderConfig = {
+    useDefault: false,
+    overrides: [{ method: 'popup', minutes: 1440 }]
+  };
+
+  const EVENT_DATE = new Date(engagementEvent.start);
 
   // ===== Envelope Open =====
   const envelopeScreen = document.getElementById('envelope-screen');
@@ -77,102 +92,117 @@
     return n < 10 ? '0' + n : String(n);
   }
 
-  // ===== Telefon takvim uygulamasını aç =====
-  const EVENT_BEGIN_MS = new Date('2026-09-26T19:00:00+03:00').getTime();
-  const EVENT_END_MS = new Date('2026-09-26T22:00:00+03:00').getTime();
-  const ICS_FILE_URL =
-    'https://yarenazrakbas.github.io/yaren-berke-nisan/event.ics?v=14';
+  // ===== Takvime Ekle (platform bazlı, dosya indirme yok) =====
+  const GOOGLE_CALENDAR_EVENT_BASE =
+    'https://calendar.google.com/calendar/r/eventedit';
 
-  function getICSContent() {
-    return [
-      'BEGIN:VCALENDAR',
-      'VERSION:2.0',
-      'PRODID:-//YarenBerke//Nisan//TR',
-      'CALSCALE:GREGORIAN',
-      'METHOD:PUBLISH',
-      'BEGIN:VEVENT',
-      'UID:yaren-berke-nisan-20260926@yarenazrakbas.github.io',
-      'DTSTAMP:' + new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z',
-      'DTSTART;TZID=Europe/Istanbul:20260926T190000',
-      'DTEND;TZID=Europe/Istanbul:20260926T220000',
-      'SUMMARY:Yaren & Berke Nişan',
-      'DESCRIPTION:Nişanımıza Hoşgeldiniz — Yaren & Berke',
-      'LOCATION:LUN\'ADA DAVET EVİ\\, Bağlar Mah. Yavuz Selim Cad. No:106/1B\\, Erenler/Sakarya',
-      'BEGIN:VALARM',
-      'TRIGGER:-P1D',
-      'ACTION:DISPLAY',
-      'DESCRIPTION:Yaren & Berke Nişanı yarın! 26 Eylül 19:00',
-      'END:VALARM',
-      'END:VEVENT',
-      'END:VCALENDAR'
-    ].join('\r\n');
+  function detectPlatform() {
+    var ua = navigator.userAgent || '';
+
+    if (/Android/i.test(ua)) {
+      return 'android';
+    }
+
+    if (/iPhone|iPod/i.test(ua)) {
+      return 'ios';
+    }
+
+    if (/iPad/i.test(ua)) {
+      return 'ios';
+    }
+
+    if (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) {
+      return 'ios';
+    }
+
+    return 'desktop';
   }
 
-  function isMobileDevice() {
-    return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent || '');
+  function formatGoogleCalendarDate(isoString, timezone) {
+    var date = new Date(isoString);
+    var parts = new Intl.DateTimeFormat('en-GB', {
+      timeZone: timezone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    }).formatToParts(date);
+
+    function part(type) {
+      for (var i = 0; i < parts.length; i++) {
+        if (parts[i].type === type) {
+          return parts[i].value;
+        }
+      }
+      return '';
+    }
+
+    return part('year') + part('month') + part('day') +
+      'T' + part('hour') + part('minute') + part('second');
   }
 
-  function isAndroidDevice() {
-    return /Android/i.test(navigator.userAgent || '');
+  function buildGoogleCalendarEventUrl(event) {
+    var start = formatGoogleCalendarDate(event.start, event.timezone);
+    var end = formatGoogleCalendarDate(event.end, event.timezone);
+
+    var params = new URLSearchParams({
+      action: 'TEMPLATE',
+      text: event.title,
+      dates: start + '/' + end,
+      details: event.description,
+      location: event.location,
+      stz: event.timezone,
+      etz: event.timezone
+    });
+
+    return GOOGLE_CALENDAR_EVENT_BASE + '?' + params.toString();
   }
 
-  function isIOSDevice() {
-    return /iPhone|iPad|iPod/i.test(navigator.userAgent || '') ||
-      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  }
+  function buildAndroidCalendarIntentUrl(event, fallbackUrl) {
+    var beginMs = new Date(event.start).getTime();
+    var endMs = new Date(event.end).getTime();
 
-  function buildAndroidIntentUrl() {
-    const fallback = encodeURIComponent(ICS_FILE_URL);
     return [
       'intent://#Intent',
       'action=android.intent.action.INSERT',
       'type=vnd.android.cursor.item/event',
-      'S.title=' + encodeURIComponent(EVENT_TITLE),
-      'S.description=' + encodeURIComponent(EVENT_DESCRIPTION),
-      'S.eventLocation=' + encodeURIComponent(EVENT_LOCATION),
-      'i.beginTime=' + EVENT_BEGIN_MS,
-      'i.endTime=' + EVENT_END_MS,
-      'S.browser_fallback_url=' + fallback,
+      'S.title=' + encodeURIComponent(event.title),
+      'S.description=' + encodeURIComponent(event.description),
+      'S.eventLocation=' + encodeURIComponent(event.location),
+      'i.beginTime=' + beginMs,
+      'i.endTime=' + endMs,
+      'S.browser_fallback_url=' + encodeURIComponent(fallbackUrl),
       'end'
     ].join(';');
   }
 
-  function openCalendarWithICSData() {
-    const blob = new Blob([getICSContent()], { type: 'text/calendar;charset=utf-8' });
-    const blobUrl = URL.createObjectURL(blob);
-    window.location.assign(blobUrl);
-    setTimeout(function () {
-      URL.revokeObjectURL(blobUrl);
-    }, 5000);
-  }
-
-  function openCalendarWithICSFile() {
-    window.location.href = ICS_FILE_URL;
-  }
-
-  function openPhoneCalendar(event) {
+  function openCalendar(event) {
     event.preventDefault();
 
-    if (!isMobileDevice()) {
-      window.alert('Takvime eklemek için davetiyeyi telefonunuzdan açın.');
+    var googleCalendarUrl = buildGoogleCalendarEventUrl(engagementEvent);
+    var platform = detectPlatform();
+
+    if (platform === 'android') {
+      window.location.href = buildAndroidCalendarIntentUrl(
+        engagementEvent,
+        googleCalendarUrl
+      );
       return;
     }
 
-    if (isAndroidDevice()) {
-      window.location.href = buildAndroidIntentUrl();
+    if (platform === 'ios') {
+      window.location.href = googleCalendarUrl;
       return;
     }
 
-    if (isIOSDevice()) {
-      openCalendarWithICSData();
-      return;
-    }
-
-    openCalendarWithICSFile();
+    window.open(googleCalendarUrl, '_blank', 'noopener,noreferrer');
   }
 
   document.querySelectorAll('.calendar-button').forEach(function (button) {
-    button.addEventListener('click', openPhoneCalendar);
+    button.addEventListener('click', openCalendar);
   });
 
   // ===== Music Toggle =====
