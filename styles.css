@@ -1,5 +1,6 @@
 /* ===== Variables ===== */
 :root {
+  color-scheme: light only;
   --cream: #f5f0e8;
   --cream-dark: #ebe4d8;
   --pink: #e8c4c4;
@@ -984,5 +985,84 @@ body.envelope-locked {
 
   .main-content {
     box-shadow: 0 0 60px rgba(0,0,0,0.4);
+  }
+}
+
+/* Keep the invitation light and blush-pink on dark-mode devices. */
+@media (prefers-color-scheme: dark) {
+  html,
+  body {
+    background: #f8edef;
+    color: #4b3338;
+  }
+
+  .countdown-section,
+  .reminder-section,
+  .story-section,
+  .location-section,
+  .timeline-section,
+  .faq-section,
+  .rsvp-section,
+  .footer {
+    background: #f8edef;
+    color: #4b3338;
+  }
+
+  .main-content {
+    background: #fffafa;
+    box-shadow: 0 0 45px rgba(137, 88, 98, 0.15);
+  }
+
+  .section-divider,
+  .countdown-divider,
+  .timeline::before {
+    background: rgba(137, 88, 98, 0.28);
+  }
+
+  .reminder-icon,
+  .location-icon,
+  .timeline-icon,
+  .timeline-time {
+    border-color: rgba(137, 88, 98, 0.45);
+  }
+
+  .timeline-icon {
+    background: #f8edef;
+  }
+
+  .btn-outline {
+    color: #4b3338;
+    border-color: rgba(137, 88, 98, 0.55);
+  }
+
+  .btn-outline:hover {
+    color: #4b3338;
+    background: rgba(212, 165, 165, 0.18);
+    border-color: #a66f7a;
+  }
+
+  .btn-reminder {
+    color: #fff;
+    background: #c78f9b;
+  }
+
+  .reminder-note,
+  .countdown-label,
+  .countdown-unit,
+  .venue-time,
+  .venue-address,
+  .rsvp-message {
+    color: #65474d;
+    opacity: 0.8;
+  }
+
+  .footer {
+    border-top-color: rgba(137, 88, 98, 0.18);
+  }
+
+  .music-toggle {
+    color: #fff;
+    background: rgba(199, 143, 155, 0.92);
+    border-color: rgba(255, 255, 255, 0.7);
   }
 }
