@@ -21,7 +21,6 @@
 
     envelope.classList.add('opened');
 
-    // Flap finishes at ~1.35s, letter finishes sliding out at ~2.15s.
     setTimeout(function () {
       mainContent.classList.remove('hidden');
       document.body.classList.remove('envelope-locked');
@@ -78,47 +77,75 @@
     return n < 10 ? '0' + n : String(n);
   }
 
-  // ===== Add to Calendar =====
-  document.getElementById('add-calendar').addEventListener('click', function () {
-    const start = formatICSDate(EVENT_DATE);
-    const end = formatICSDate(new Date(EVENT_DATE.getTime() + 4 * 60 * 60 * 1000));
-
-    const ics = [
-      'BEGIN:VCALENDAR',
-      'VERSION:2.0',
-      'PRODID:-//YarenBerke//Nişan//TR',
-      'BEGIN:VEVENT',
-      'DTSTART:' + start,
-      'DTEND:' + end,
-      'SUMMARY:' + EVENT_TITLE,
-      'DESCRIPTION:' + EVENT_DESCRIPTION,
-      'LOCATION:' + EVENT_LOCATION,
-      'END:VEVENT',
-      'END:VCALENDAR'
-    ].join('\r\n');
-
-    const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'yaren-berke-nisan.ics';
-    link.click();
-    URL.revokeObjectURL(url);
-  });
-
-  function formatICSDate(date) {
+  // ===== Calendar with 1-day reminder =====
+  function formatICSStamp(date) {
     return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
   }
 
-  // ===== Music Toggle (placeholder — add your own audio file) =====
+  function escapeICS(text) {
+    return text.replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\n/g, '\\n');
+  }
+
+  function buildICS() {
+    const alarmText = 'Yaren & Berke Nişanı yarın! 26 Eylül 19:00 — LUN\'ADA DAVET EVİ';
+
+    return [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//YarenBerke//Nisan//TR',
+      'CALSCALE:GREGORIAN',
+      'METHOD:PUBLISH',
+      'BEGIN:VEVENT',
+      'UID:yaren-berke-nisan-20260926@yarenazrakbas.github.io',
+      'DTSTAMP:' + formatICSStamp(new Date()),
+      'DTSTART;TZID=Europe/Istanbul:20260926T190000',
+      'DTEND;TZID=Europe/Istanbul:20260926T230000',
+      'SUMMARY:' + escapeICS(EVENT_TITLE),
+      'DESCRIPTION:' + escapeICS(EVENT_DESCRIPTION),
+      'LOCATION:' + escapeICS(EVENT_LOCATION),
+      'BEGIN:VALARM',
+      'TRIGGER:-P1D',
+      'ACTION:DISPLAY',
+      'DESCRIPTION:' + escapeICS(alarmText),
+      'END:VALARM',
+      'END:VEVENT',
+      'END:VCALENDAR'
+    ].join('\r\n');
+  }
+
+  function addToCalendar() {
+    const ics = buildICS();
+    const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+
+    if (isIOS) {
+      window.location.href = url;
+      setTimeout(function () {
+        URL.revokeObjectURL(url);
+      }, 10000);
+      return;
+    }
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'yaren-berke-nisan.ics';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+
+  document.getElementById('add-calendar').addEventListener('click', addToCalendar);
+  document.getElementById('add-reminder').addEventListener('click', addToCalendar);
+
+  // ===== Music Toggle =====
   let isPlaying = false;
 
   musicToggle.addEventListener('click', function () {
     isPlaying = !isPlaying;
     musicToggle.querySelector('.icon-on').classList.toggle('hidden', !isPlaying);
     musicToggle.querySelector('.icon-off').classList.toggle('hidden', isPlaying);
-
-    // To enable background music, uncomment and add an audio file:
-    // if (isPlaying) { audio.play(); } else { audio.pause(); }
   });
 })();
