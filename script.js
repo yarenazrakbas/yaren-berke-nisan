@@ -215,8 +215,9 @@
   }
 
   // ===== Takvime Ekle — gerçek <a href>, JS navigation yok =====
+  // Android/Samsung Chrome: /calendar/render eventedit'ten daha güvenilir
   const GOOGLE_CALENDAR_EVENT_BASE =
-    'https://calendar.google.com/calendar/r/eventedit';
+    'https://calendar.google.com/calendar/render';
 
   function formatGoogleCalendarDate(isoString, timezone) {
     var date = new Date(isoString);
@@ -240,22 +241,30 @@
       return '';
     }
 
-    return part('year') + part('month') + part('day') +
+    var formatted = part('year') + part('month') + part('day') +
       'T' + part('hour') + part('minute') + part('second');
+
+    // Intl desteklenmeyen eski Android WebView için sabit tarih yedeği
+    if (!formatted || formatted.indexOf('T') === 0) {
+      if (isoString === engagementEvent.start) return '20260926T190000';
+      if (isoString === engagementEvent.end) return '20260926T220000';
+    }
+
+    return formatted;
   }
 
   function createGoogleCalendarUrl(event) {
     var start = formatGoogleCalendarDate(event.start, event.timezone);
     var end = formatGoogleCalendarDate(event.end, event.timezone);
+    var dates = start + '/' + end;
 
     var params = new URLSearchParams({
       action: 'TEMPLATE',
       text: event.title,
-      dates: start + '/' + end,
+      dates: dates,
       details: event.description,
       location: event.location,
-      stz: event.timezone,
-      etz: event.timezone
+      ctz: event.timezone
     });
 
     return GOOGLE_CALENDAR_EVENT_BASE + '?' + params.toString();
@@ -269,7 +278,13 @@
     }
 
     document.querySelectorAll('.calendar-link').forEach(function (link) {
-      link.href = googleCalendarUrl;
+      if (
+        googleCalendarUrl &&
+        googleCalendarUrl.indexOf('dates=') !== -1 &&
+        googleCalendarUrl.indexOf('20260926') !== -1
+      ) {
+        link.setAttribute('href', googleCalendarUrl);
+      }
     });
   }
 
