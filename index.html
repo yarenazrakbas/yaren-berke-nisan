@@ -16,7 +16,28 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <link rel="stylesheet" href="styles.css?v=20260901-18">
+  <link rel="stylesheet" href="styles.css?v=20260901-19">
+  <style>
+    /* Kritik hero stilleri — eski CSS önbelleğine karşı */
+    .hero {
+      background: #f7f5ef !important;
+      border: 1px solid #e5dfd3 !important;
+      border-radius: 12px !important;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35) !important;
+    }
+    .hero .couple-names {
+      font-family: 'Cinzel', Georgia, serif !important;
+      text-transform: uppercase !important;
+      display: grid !important;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) !important;
+    }
+    .hero .btn-confirm {
+      border: 1px solid #a87e6b !important;
+      text-decoration: none !important;
+      font-family: 'Cinzel', Georgia, serif !important;
+      text-transform: uppercase !important;
+    }
+  </style>
 </head>
 <body>
 
@@ -54,34 +75,18 @@
 
       <div class="env-letter">
         <div class="env-letter-paper">
-          <svg class="env-letter-floral env-letter-floral-top" viewBox="0 0 400 130" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 85 Q50 25 100 65 Q150 105 200 45 Q250 5 300 55 Q350 95 400 35 L400 0 L0 0Z" fill="url(#letterGrad)" opacity="0.35"/>
-            <ellipse cx="70" cy="72" rx="13" ry="7" fill="#a8b896" opacity="0.45" transform="rotate(-28 70 72)"/>
-            <ellipse cx="118" cy="52" rx="15" ry="8" fill="#8fa87a" opacity="0.4" transform="rotate(22 118 52)"/>
-            <ellipse cx="288" cy="58" rx="14" ry="8" fill="#a8b896" opacity="0.45" transform="rotate(-18 288 58)"/>
-            <ellipse cx="330" cy="70" rx="11" ry="6" fill="#8fa87a" opacity="0.4" transform="rotate(34 330 70)"/>
-            <defs>
-              <linearGradient id="letterGrad" x1="0" y1="0" x2="400" y2="130">
-                <stop offset="0%" stop-color="#c5d4b0"/>
-                <stop offset="100%" stop-color="#e8ede0"/>
-              </linearGradient>
-            </defs>
-          </svg>
+          <img class="env-letter-floral env-letter-floral-top" src="https://yarenazrakbas.github.io/yaren-berke-nisan/images/hero-floral-top.png?v=19" alt="" aria-hidden="true">
           <div class="env-letter-content">
-            <p class="env-letter-sub">Nişanımızı birlikte kutlamak için davetlisiniz</p>
-            <h2 class="env-letter-names">Yaren <span class="amp">&</span> Berke</h2>
+            <p class="env-letter-sub">Nişanımızı birlikte kutlamak için<br>davetlisiniz</p>
+            <h2 class="env-letter-names">
+              <span>Yaren</span>
+              <span class="amp">&</span>
+              <span>Berke</span>
+            </h2>
             <span class="env-letter-rule"></span>
             <p class="env-letter-date">26 Eylül 2026</p>
           </div>
-          <svg class="env-letter-floral env-letter-floral-bottom" viewBox="0 0 400 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 20 Q100 80 200 35 Q300 80 400 25 L400 100 L0 100Z" fill="url(#letterGrad2)" opacity="0.3"/>
-            <defs>
-              <linearGradient id="letterGrad2" x1="0" y1="0" x2="400" y2="100">
-                <stop offset="0%" stop-color="#e8ede0"/>
-                <stop offset="100%" stop-color="#c5d4b0"/>
-              </linearGradient>
-            </defs>
-          </svg>
+          <img class="env-letter-floral env-letter-floral-bottom" src="https://yarenazrakbas.github.io/yaren-berke-nisan/images/hero-floral-bottom.png?v=19" alt="" aria-hidden="true">
         </div>
       </div>
 
@@ -103,7 +108,7 @@
 
     <!-- Hero Card -->
     <section class="hero">
-      <img class="hero-floral hero-floral-top" src="images/hero-floral-top.png" alt="" aria-hidden="true">
+      <img class="hero-floral hero-floral-top" src="https://yarenazrakbas.github.io/yaren-berke-nisan/images/hero-floral-top.png?v=19" alt="" aria-hidden="true">
       <div class="hero-inner">
         <p class="hero-subtitle">Nişanımızı birlikte kutlamak için<br>davetlisiniz</p>
         <h1 class="couple-names">
@@ -116,7 +121,7 @@
         <p class="hero-date">26 Eylül 2026</p>
         <a href="#rsvp" class="btn-confirm">Katılımını onayla</a>
       </div>
-      <img class="hero-floral hero-floral-bottom" src="images/hero-floral-bottom.png" alt="" aria-hidden="true">
+      <img class="hero-floral hero-floral-bottom" src="https://yarenazrakbas.github.io/yaren-berke-nisan/images/hero-floral-bottom.png?v=19" alt="" aria-hidden="true">
     </section>
 
     <!-- Countdown -->
@@ -282,6 +287,6 @@
     </svg>
   </button>
 
-  <script src="script.js?v=20260901-17"></script>
+  <script src="script.js?v=20260901-19"></script>
 </body>
 </html>
